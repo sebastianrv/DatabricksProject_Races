@@ -7,8 +7,8 @@
 storageAccountName = "sarsv2023"
 storageAccountAccessKey = "4laHHRo3eLqlGttXboMIODFDxL85I+F8AitgF5cPS2HB+2CfzW8Wh8PKzscgVan/CFG8/i5unlWk+AStABkbNA=="
 sasToken = "?sv=2022-11-02&ss=bfqt&srt=sco&sp=rwdlacupyx&se=2023-11-01T09:18:19Z&st=2023-10-27T01:18:19Z&spr=https&sig=Nbn2QYz0si6T7MNzx81UraySa4JGN9W57yGlc3oliEw%3D"
-blobContainerName = "p1-raw"
-mountPoint = "/mnt/sarsv2023/p1-raw"
+blobContainerName = "blob-raw"
+mountPoint = "/mnt/sarsv2023/blob-raw"
 if not any(mount.mountPoint == mountPoint for mount in dbutils.fs.mounts()):
   try:
     dbutils.fs.mount(

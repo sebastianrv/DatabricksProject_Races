@@ -1,9 +1,19 @@
 -- Databricks notebook source
+-- MAGIC %md ##Configuration
+
+-- COMMAND ----------
+
+--%python
+--%run "./../0_Configuration/ADLS_Connection"
+--%run "./../0_Configuration/Create_Database"
+
+-- COMMAND ----------
+
 -- MAGIC %md ##Create tables for CSV files
 
 -- COMMAND ----------
 
-CREATE DATABASE IF NOT EXISTS f1_raw;
+-- MAGIC %md ###Create Circuits Table
 
 -- COMMAND ----------
 
@@ -20,7 +30,7 @@ CREATE TABLE IF NOT EXISTS f1_raw.circuits(
   url STRING
 )
 USING csv
-OPTIONS (path "/mnt/sagrupo3proyecto1/p1-raw/dataset/circuits.csv", header true);
+OPTIONS (path "/mnt/sarsv2023/blob-raw/circuits.csv", header true);
 
 -- COMMAND ----------
 
@@ -28,7 +38,7 @@ select * from f1_raw.circuits
 
 -- COMMAND ----------
 
--- MAGIC %md **Create races table**
+-- MAGIC %md ###Create Races Table
 
 -- COMMAND ----------
 
@@ -44,7 +54,7 @@ CREATE TABLE IF NOT EXISTS f1_raw.races(
   url STRING
 )
 USING csv
-OPTIONS (path "/mnt/sagrupo3proyecto1/p1-raw/dataset/races.csv", header true, delimiter ',');
+OPTIONS (path "/mnt/sarsv2023/blob-raw/races.csv", header true, delimiter ',');
 
 -- COMMAND ----------
 
@@ -53,6 +63,10 @@ select * from f1_raw.races
 -- COMMAND ----------
 
 -- MAGIC %md ###Create tables for JSON files
+
+-- COMMAND ----------
+
+-- MAGIC %md ###Create Constructors Table
 
 -- COMMAND ----------
 
@@ -65,11 +79,15 @@ nationality STRING,
 url STRING
 )
 USING json
-OPTIONS (path "/mnt/sagrupo3proyecto1/p1-raw/dataset/constructors.json");
+OPTIONS (path "/mnt/sarsv2023/blob-raw/constructors.json");
 
 -- COMMAND ----------
 
 select * from f1_raw.constructors
+
+-- COMMAND ----------
+
+-- MAGIC %md ###Create Drivers Table
 
 -- COMMAND ----------
 
@@ -85,19 +103,11 @@ nationality STRING,
 url STRING
 )
 USING json
-OPTIONS (path "/mnt/sagrupo3proyecto1/p1-raw/dataset/drivers.json");
+OPTIONS (path "/mnt/sarsv2023/blob-raw/drivers.json");
 
 -- COMMAND ----------
 
 select * from f1_raw.drivers
-
--- COMMAND ----------
-
--- MAGIC %md ###Create results table
-
--- COMMAND ----------
-
--- MAGIC %md ###Create pit stops
 
 -- COMMAND ----------
 
@@ -118,7 +128,7 @@ CREATE TABLE IF NOT EXISTS f1_raw.qualifying(
  q3 STRING
 )
 USING json
-OPTIONS (path "/mnt/sagrupo3proyecto1/p1-raw/dataset/qualifying/*.json");
+OPTIONS (path "/mnt/sarsv2023/blob-raw/qualifying/",multiline=true);
 
 -- COMMAND ----------
 
@@ -126,31 +136,34 @@ select * from f1_raw.qualifying
 
 -- COMMAND ----------
 
--- MAGIC %md ###Create table lap_times
+-- MAGIC %md ###Create results table
 
 -- COMMAND ----------
 
-DROP TABLE IF EXISTS f1_raw.lapTimes;
-CREATE TABLE IF NOT EXISTS f1_raw.lapTimes(
-raceId INT,
-driverId INT,
-lap INT,
-position INT,
-time STRING,
-milliseconds INT
+DROP TABLE IF EXISTS f1_raw.results;
+CREATE TABLE IF NOT EXISTS f1_raw.results(
+ resultId INT,
+ raceId INT,
+ driverId INT,
+ constructorId INT,
+ number INT,
+ grid INT,
+ position INT,
+ positinText STRING,
+ positionOrder INT,
+ points FLOAT,
+ laps INT,
+ time STRING,
+ miliseconds INT,
+ fastestLap INT,
+ rank INT,
+ fastestLapTime STRING,
+ fastestLapSpeed STRING,
+ statusId INT
 )
-USING csv
-OPTIONS (path "/mnt/sagrupo3proyecto1/p1-raw/dataset/lap_times/");
+USING json
+OPTIONS (path "/mnt/sarsv2023/blob-raw/results.json");
 
 -- COMMAND ----------
 
-select * from f1_raw.laptimes
-
--- COMMAND ----------
-
-CREATE DATABASE IF NOT EXISTS f1_processed
-LOCATION "/mnt/sagrupo3proyecto1/p1-raw/processed"
-
--- COMMAND ----------
-
-SELECT * FROM f1_raw.circuits
+select * from f1_raw.results
