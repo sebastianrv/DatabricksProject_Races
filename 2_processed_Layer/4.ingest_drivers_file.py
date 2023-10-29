@@ -3,7 +3,7 @@
 
 # COMMAND ----------
 
-# MAGIC %run "./../includes/configuration"
+# MAGIC %run "./../0_Configuration/Folder_Path"
 
 # COMMAND ----------
 
@@ -20,7 +20,7 @@ from pyspark.sql.functions import col, concat, lit
 
 # COMMAND ----------
 
-dbutils.fs.head("/mnt/sa70903775222/raw/drivers.json")
+dbutils.fs.head("/mnt/sarsv2023/blob-raw/drivers.json")
 {"driverId":1,"driverRef":"hamilton","number":44,"code":"HAM","name":{"forename":"Lewis","surname":"Hamilton"},"dob":"1985-01-07","nationality":"British","url":"http://en.wikipedia.org/wiki/Lewis_Hamilton"}
 
 # COMMAND ----------
@@ -79,3 +79,12 @@ drivers_final_df = drivers_with_columns_df.drop(col("url"))
 # COMMAND ----------
 
 drivers_final_df.write.mode("overwrite").format("parquet").saveAsTable("f1_processed.drivers")
+
+# COMMAND ----------
+
+drivers_final_df.write.mode("overwrite").parquet(processed_folder_path + "/driversFile")
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC select * from f1_processed.drivers

@@ -3,8 +3,7 @@
 
 # COMMAND ----------
 
-# MAGIC %run "/Repos/u20171a226@upc.edu.pe/DatabricksProject_Races/p2-silver/p2-configuration/p2-configuration
-# MAGIC "
+# MAGIC %run "./../0_Configuration/Folder_Path"
 
 # COMMAND ----------
 
@@ -12,7 +11,8 @@
 
 # COMMAND ----------
 
-from pyspark.sql.types import Structype, StructField, IntegertType, StringType, StringType, FloatType,col
+from pyspark.sql.types import StructType, StructField, IntegerType, StringType, StringType, FloatType
+from pyspark.sql.functions import current_timestamp, lit, col
 
 # COMMAND ----------
 
@@ -66,7 +66,8 @@ results_with_columns_df = results_df.withColumnRenamed("resultId","result_id") \
 
 # COMMAND ----------
 
-results_final_df= results_with_columns_df.drop(col("statusId","rank"))
+cols_to_remove = ["statusId", "rank"]
+results_final_df= results_with_columns_df.drop(*cols_to_remove)
 
 # COMMAND ----------
 
@@ -75,3 +76,12 @@ results_final_df= results_with_columns_df.drop(col("statusId","rank"))
 # COMMAND ----------
 
 results_final_df.write.mode("overwrite").format("parquet").saveAsTable("f1_processed.results")
+
+# COMMAND ----------
+
+results_final_df.write.mode("overwrite").parquet(processed_folder_path + "/resultsFile") 
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC select * from f1_processed.results

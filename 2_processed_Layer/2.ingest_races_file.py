@@ -3,7 +3,7 @@
 
 # COMMAND ----------
 
-# MAGIC %run "./../includes/configuration"
+# MAGIC %run "./../0_Configuration/Folder_Path"
 
 # COMMAND ----------
 
@@ -73,13 +73,8 @@ races_selected_df = races_with_timestamp_df.select(col('raceId').alias('race_id'
 
 # COMMAND ----------
 
-races_selected_df.write.mode('overwrite').partitionBy("race_year").format("parquet").saveAsTable("f1_processed.races")
+races_selected_df.write.mode('overwrite').format("parquet").saveAsTable("f1_processed.races")
 
 # COMMAND ----------
 
-# MAGIC %sql
-# MAGIC DESCRIBE DETAIL f1_processed.races
-
-# COMMAND ----------
-
-display(dbutils.fs.ls("/mnt/sa70903775222/processed/races"))
+races_selected_df.write.mode('overwrite').parquet(processed_folder_path + "/racesFile")

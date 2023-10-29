@@ -3,7 +3,7 @@
 
 # COMMAND ----------
 
-# MAGIC %run "./../includes/configuration"
+# MAGIC %run "./../0_Configuration/Folder_Path"
 
 # COMMAND ----------
 
@@ -49,3 +49,7 @@ constructor_final_df = constructor_dropped_df.withColumnRenamed("constructorId",
 # COMMAND ----------
 
 constructor_final_df.write.mode("overwrite").format("parquet").saveAsTable("f1_processed.constructors")
+
+# COMMAND ----------
+
+constructor_final_df.write.mode("overwrite").parquet(processed_folder_path + "/constructorsFile")

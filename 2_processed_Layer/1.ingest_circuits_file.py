@@ -1,10 +1,9 @@
 # Databricks notebook source
-# MAGIC %md Paso 1 - Leer el archivo CSV usando el Reader de Spark
+# MAGIC %md ##Paso 1 - Leer el archivo CSV usando el Reader de Spark
 
 # COMMAND ----------
 
-# MAGIC %run "./../includes/configuration"
-# MAGIC
+# MAGIC %run "./../0_Configuration/Folder_Path"
 
 # COMMAND ----------
 
@@ -33,7 +32,7 @@ circuits_df = spark.read\
 
 # COMMAND ----------
 
-# MAGIC %md Paso 2 - Seleccionar la columnas necesarias
+# MAGIC %md ##Paso 2 - Seleccionar la columnas necesarias
 
 # COMMAND ----------
 
@@ -50,7 +49,7 @@ circuits_selected_df = circuits_df.select(
 
 # COMMAND ----------
 
-# MAGIC %md Paso 3 - Renombrar columnar segun se necesite
+# MAGIC %md ##Paso 3 - Renombrar columnar segun se necesite
 
 # COMMAND ----------
 
@@ -64,8 +63,12 @@ circuits_renamed_df = circuits_selected_df.withColumnRenamed("circuitId","circui
 
 # COMMAND ----------
 
-# MAGIC %md Paso 4 - Escribir el DataFrame como resultante al Data Lake como parquet
+# MAGIC %md ##Paso 4 - Escribir el DataFrame como resultante al Data Lake como parquet
 
 # COMMAND ----------
 
 circuits_renamed_df.write.mode("overwrite").format("parquet").saveAsTable("f1_processed.circuits")
+
+# COMMAND ----------
+
+circuits_renamed_df.write.mode('overwrite').parquet(processed_folder_path + "/circuitFile")
